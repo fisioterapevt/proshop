@@ -9,6 +9,9 @@ const router = express.Router();
 router.get("/", async (req, res) => {
 	try {
 		const products = await Product.find({});
+		//res.status(401);
+		//res.status(401).json({ message: "Not Authorized" });
+
 		res.json(products);
 	} catch (error) {
 		res.status(404).json({ message: "Products not found" });
