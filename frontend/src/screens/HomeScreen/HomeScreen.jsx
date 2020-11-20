@@ -14,6 +14,8 @@ const HomeScreen = () => {
 	const productList = useSelector((state) => state.productList);
 	const { loading, error, products } = productList;
 
+	//localStorage.clear();
+
 	useEffect(() => {
 		dispatch(listProducts());
 	}, [dispatch]);
