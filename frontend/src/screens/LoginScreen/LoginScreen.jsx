@@ -30,7 +30,6 @@ const LoginScreen = ({ location, history }) => {
 		evt.preventDefault();
 		dispatch(login(email, password));
 	};
-	console.log(error);
 
 	return (
 		<FormContainer>

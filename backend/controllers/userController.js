@@ -7,7 +7,9 @@ const generateToken = require("../utils/generateToken");
 const authUser = async (req, res) => {
 	try {
 		const { email, password } = req.body;
+
 		const user = await User.findOne({ email });
+
 		if (user && (await user.matchPassword(password))) {
 			res.json({
 				_id: user._id,
@@ -17,7 +19,9 @@ const authUser = async (req, res) => {
 				token: generateToken(user._id),
 			});
 		} else {
-			res.status(401).json({ message: "Invalid email or password" });
+			res
+				.status(401)
+				.json({ message: "[BACKEND] Invalid email or password" });
 		}
 	} catch (error) {
 		res.status(401).json({ message: error });
@@ -35,7 +39,7 @@ const registerUser = async (req, res) => {
 		const userExists = await User.findOne({ email });
 
 		if (userExists) {
-			res.status(400).json({ message: "User alredy exists" });
+			res.status(400).json({ message: "[BACKEND] User alredy exists" });
 		}
 		const user = await User.create({ name, email, password });
 
@@ -48,15 +52,15 @@ const registerUser = async (req, res) => {
 				token: generateToken(user._id),
 			});
 		} else {
-			res.status(400).json({ message: "Invalid user data" });
+			res.status(400).json({ message: "[BACKEND] Invalid user data" });
 		}
 	} catch (error) {
-		res.status(401).json({ message: error });
+		res.status(401).json({ message: "[BACKEND] Invalid user data" });
 		console.log(error);
 	}
 };
 
-//* @desc  Get user & get token
+//* @desc  Get user profile
 //* @route  POST /api/users/profile
 //* @access  Private
 const getUserProfile = async (req, res) => {
@@ -71,8 +75,49 @@ const getUserProfile = async (req, res) => {
 				isAdmin: user.isAdmin,
 			});
 		} else {
-			res.status(401).json({ message: "User not found" });
+			res.status(404).json({ message: "[BACKEND] User not found" });
 		}
-	} catch (error) {}
+	} catch (error) {
+		res.status(404).json({ message: "[BACKEND] User not found" });
+		console.log(error);
+	}
 };
-module.exports = { authUser, registerUser, getUserProfile };
+
+//* @desc  Update user profile
+//* @route  POST /api/users/profile
+//* @access  Private
+const updateUserProfile = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+
+		if (user) {
+			user.name = req.body.name || user.name;
+			user.email = req.body.email || user.email;
+
+			if (req.body.password) {
+				user.password = req.body.password;
+			}
+
+			const updatedUser = await user.save();
+
+			res.json({
+				_id: updatedUser._id,
+				name: updatedUser.name,
+				email: updatedUser.email,
+				isAdmin: updatedUser.isAdmin,
+				token: generateToken(updatedUser._id),
+			});
+		} else {
+			res.status(404).json({ message: "[BACKEND] User not found" });
+		}
+	} catch (error) {
+		res.status(401).json({ message: "[BACKEND] User not updated" });
+		console.log(error);
+	}
+};
+module.exports = {
+	authUser,
+	registerUser,
+	getUserProfile,
+	updateUserProfile,
+};

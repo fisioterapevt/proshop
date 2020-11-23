@@ -11,7 +11,6 @@ import FormContainer from "../../components/FormContainer/FormContainer";
 
 const RegisterScreen = ({ location, history }) => {
 	const [name, setName] = useState("");
-
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,7 +32,7 @@ const RegisterScreen = ({ location, history }) => {
 	const submitHandler = (evt) => {
 		evt.preventDefault();
 		if (password !== confirmPassword) {
-			setMessage("Passwords do not match");
+			setMessage("[FRONTEND] Passwords do not match");
 		} else {
 			dispatch(register(name, email, password));
 		}
