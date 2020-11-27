@@ -85,6 +85,10 @@ const RegisterScreen = ({ location, history }) => {
 					></Form.Control>
 				</Form.Group>
 
+				<Button type="submit" variant="primary">
+					Register
+				</Button>
+
 				<Row className="py-3">
 					<Col>
 						Have an Account?{" "}
@@ -93,10 +97,6 @@ const RegisterScreen = ({ location, history }) => {
 						</Link>
 					</Col>
 				</Row>
-
-				<Button type="submit" variant="primary">
-					Register
-				</Button>
 			</Form>
 		</FormContainer>
 	);
