@@ -155,7 +155,6 @@ const deleteUser = async (req, res) => {
 const getUserById = async (req, res) => {
 	try {
 		const user = await User.findById(req.params.id).select("-password");
-		console.log(user);
 		if (user) {
 			res.json(user);
 		} else {
@@ -173,11 +172,10 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
 	try {
 		const user = await User.findById(req.params.id);
-
 		if (user) {
 			user.name = req.body.name || user.name;
 			user.email = req.body.email || user.email;
-			user.isAdmin = req.body.isAdmin || user.isAdmin;
+			user.isAdmin = req.body.isAdmin;
 
 			if (req.body.password) {
 				user.password = req.body.password;

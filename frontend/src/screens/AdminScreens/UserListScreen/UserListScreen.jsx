@@ -65,7 +65,7 @@ const UserListScreen = ({ history }) => {
 											style={{ color: "green" }}
 										></i>
 									) : (
-										<i className="fas fa-time" style={{ color: "red" }}></i>
+										<i className="fas fa-times" style={{ color: "red" }}></i>
 									)}
 								</td>
 								<td>
@@ -79,7 +79,6 @@ const UserListScreen = ({ history }) => {
 										className="btn-sm"
 										onClick={() => deleteHandler(user._id)}
 									>
-										{" "}
 										<i className="fas fa-trash"></i>
 									</Button>
 								</td>

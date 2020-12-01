@@ -31,7 +31,7 @@ const addOrderItems = async (req, res) => {
 
 			const createdOrder = await order.save();
 
-			res.status(201).json(createdOrder);
+			return res.status(201).json(createdOrder);
 		}
 	} catch (error) {
 		res.status(404).json({ message: error.message });
@@ -51,7 +51,7 @@ const getOrderById = async (req, res) => {
 		if (order) {
 			res.json(order);
 		} else {
-			res.status(404).json({ message: "Order not found" });
+			return res.status(404).json({ message: "Order not found" });
 		}
 	} catch (error) {
 		res.status(404).json({ message: error.message });
@@ -60,9 +60,9 @@ const getOrderById = async (req, res) => {
 };
 
 //* @desc  Update order to paid
-//* @route  GET /api/orders/:id/play
+//* @route  GET /api/orders/:id/pay
 //* @access  Private
-const updateOrderToPay = async (req, res) => {
+const updateOrderToPaid = async (req, res) => {
 	try {
 		const order = await Order.findById(req.params.id);
 		if (order) {
@@ -79,7 +79,7 @@ const updateOrderToPay = async (req, res) => {
 
 			res.json(updatedOrder);
 		} else {
-			res.status(404).json({ message: "Order not found" });
+			return res.status(404).json({ message: "Order not found" });
 		}
 	} catch (error) {
 		res.status(404).json({ message: error.message });
@@ -100,9 +100,46 @@ const getMyOrders = async (req, res) => {
 	}
 };
 
+//* @desc  Get all orders
+//* @route  GET /api/orders
+//* @access  Private/Admin
+const getOrders = async (req, res) => {
+	try {
+		const orders = await Order.find({}).populate("user", "id name");
+		res.json(orders);
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+		console.log(error);
+	}
+};
+
+//* @desc  Update order to delivered
+//* @route  GET /api/orders/:id/deliver
+//* @access  Private/Admin
+const updateOrderToDelivered = async (req, res) => {
+	try {
+		const order = await Order.findById(req.params.id);
+		if (order) {
+			order.isDelivered = true;
+			order.deliveredAt = Date.now();
+
+			const updatedOrder = await order.save();
+
+			res.json(updatedOrder);
+		} else {
+			return res.status(404).json({ message: "Order not found" });
+		}
+	} catch (error) {
+		res.status(404).json({ message: error.message });
+		console.log(error);
+	}
+};
+
 module.exports = {
 	addOrderItems,
 	getOrderById,
-	updateOrderToPay,
+	updateOrderToPaid,
+	updateOrderToDelivered,
 	getMyOrders,
+	getOrders,
 };
