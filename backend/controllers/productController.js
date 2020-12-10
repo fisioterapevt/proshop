@@ -80,7 +80,7 @@ const createProduct = async (req, res) => {
 			category: "Sample category",
 			countInStock: 0,
 			numReviews: 0,
-			description: "Samle description",
+			description: "Sample description",
 		});
 
 		const createdProduct = await product.save();
@@ -172,7 +172,7 @@ const getTopProducts = async (req, res) => {
 	try {
 	} catch (error) {
 		res.status(404).json({ message: "Product was not updated" });
-		console.log(error);
+    console.log(error);
 	}
 };
 
